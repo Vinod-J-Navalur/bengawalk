@@ -2,8 +2,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import AdmZip from "adm-zip";
 import { jsPDF } from "jspdf";
+import path from "path";
 
-const GTFS_ZIP_PATH = "/bmtc.zip";
+const GTFS_ZIP_PATH = path.join(process.cwd(), "public/bmtc.zip");
 
 
 interface GTFSData {
