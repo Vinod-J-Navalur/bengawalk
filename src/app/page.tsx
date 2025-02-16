@@ -143,33 +143,11 @@ function App() {
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                onClick={handleSearch}
-                disabled={!routeNumber || loading}
-                className="bg-blue-500 text-white rounded-xl py-2.5 sm:py-3 font-medium 
-                          transition-all duration-200 hover:bg-blue-600 
-                          disabled:bg-gray-200 disabled:cursor-not-allowed 
-                          text-sm sm:text-base
-                          flex items-center justify-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Searching...
-                  </>
-                ) : (
-                  <>
-                    <Search className="w-5 h-5" />
-                    Search Route
-                  </>
-                )}
-              </button>
-
+            <div className="w-full">
               <button
                 onClick={handleDownload}
-                disabled={!routeNumber || downloading || !previewUrl}
-                className="bg-green-500 text-white rounded-xl py-2.5 sm:py-3 font-medium 
+                disabled={!routeNumber || downloading}
+                className="w-full bg-green-500 text-white rounded-xl py-2.5 sm:py-3 font-medium 
                           transition-all duration-200 hover:bg-green-600 
                           disabled:bg-gray-200 disabled:cursor-not-allowed 
                           text-sm sm:text-base
