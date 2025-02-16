@@ -19,6 +19,7 @@
     "next": "15.1.7",
     "papaparse": "^5.5.2",
     "pdfkit": "^0.16.0",
+    "lucide-react": "^0.475.0",
     "puppeteer": "^24.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
