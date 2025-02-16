@@ -1,0 +1,39 @@
+{
+  "name": "bengawalk",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/papaparse": "^5.3.15",
+    "adm-zip": "^0.5.16",
+    "csv-parse": "^5.6.0",
+    "csv-parser": "^3.2.0",
+    "difflib": "^0.2.4",
+    "jspdf": "^2.5.2",
+    "jszip": "^3.10.1",
+    "next": "15.1.7",
+    "papaparse": "^5.5.2",
+    "pdfkit": "^0.16.0",
+    "puppeteer": "^24.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/adm-zip": "^0.5.7",
+    "@types/node": "^20",
+    "@types/pdfkit": "^0.13.9",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.7",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
