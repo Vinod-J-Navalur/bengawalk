@@ -113,7 +113,7 @@ export async function GET(req: NextRequest) {
     doc.addImage(busIconBase64, 'PNG', 2, 3, 2.5, 2.5); // x, y, width, height in mm
 
     // Title (moved slightly to the right to accommodate icon)
-    doc.setFontSize(6);
+    doc.setFontSize(5);
     doc.text(routeNumber, 6, 5, { align: 'left' });
 
     // Stops list
