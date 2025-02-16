@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import AdmZip from "adm-zip";
 import { jsPDF } from "jspdf";
 
-const GTFS_ZIP_PATH = "public/bmtc.zip";
+const GTFS_ZIP_PATH = "/bmtc.zip";
 
 
 interface GTFSData {
