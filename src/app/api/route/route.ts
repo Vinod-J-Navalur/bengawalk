@@ -1,16 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
 import AdmZip from "adm-zip";
 import { jsPDF } from "jspdf";
 
 const GTFS_ZIP_PATH = "public/bmtc.zip";
-const OUTPUT_DIR = "public/output";
 
-// Ensure output directory exists
-if (!fs.existsSync(OUTPUT_DIR)) {
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-}
 
 interface GTFSData {
   routes: Route[];
