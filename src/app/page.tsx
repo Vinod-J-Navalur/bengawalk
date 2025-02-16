@@ -32,7 +32,7 @@ function App() {
 
   const handleSearch = async () => {
     if (!routeNumber) return;
-    
+    setPreviewUrl('')
     setLoading(true);
     try {
       const response = await fetch(`/api/route?route=${routeNumber}`, {
@@ -43,7 +43,7 @@ function App() {
         throw new Error('Route not found');
       }
 
-      setPreviewUrl(`/api/route?route=${routeNumber}#toolbar=0&embedded=true`);
+      setPreviewUrl(`/api/route?route=${routeNumber}#toolbar=0`);
     } catch (error) {
       alert(`Error finding route information ${error}`);
     } finally {
@@ -198,6 +198,8 @@ function App() {
               </div>
               <iframe 
                 src={previewUrl}
+                width="100%" height="100%"
+                // style="border: none; position: absolute; top: 0; left: 0;"
                 className="w-full h-[300px] sm:h-[400px] border-0"
                 title="Route Preview"
               />
