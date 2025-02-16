@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import AdmZip from "adm-zip";
 import { jsPDF } from "jspdf";
 import path from "path";
+// import { setupFonts } from '@/lib/fonts';
+
 
 const GTFS_ZIP_PATH = path.join(process.cwd(), "public/bmtc.zip");
 
@@ -87,9 +89,10 @@ const getStopsForRoute = (routeShortName: string, data: GTFSData) => {
   return tripStopTimes.map((st) => stops.find((s) => s.stop_id === st.stop_id));
 };
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const { routeNumber } = await req.json();
+    const searchParams = req.nextUrl.searchParams;
+    const routeNumber = searchParams.get('route');
     
     if (!routeNumber) {
       return NextResponse.json({ error: "Route number is required" }, { status: 400 });
@@ -98,28 +101,40 @@ export async function POST(req: NextRequest) {
     const gtfsData = await loadGTFSData(GTFS_ZIP_PATH);
     const stops = getStopsForRoute(routeNumber, gtfsData);
 
-    // Generate PDF using jsPDF
-    const doc = new jsPDF();
-    const fontSize = 16;
-    const lineHeight = fontSize / 72 * 25.4; // Convert to mm
-    let yPosition = 20;
+    const doc = new jsPDF({
+      unit: 'mm',
+      format: [29, 62],
+      putOnlyUsedFonts: true
+    });
 
-    // Add title
-    doc.setFontSize(fontSize);
-    doc.text(`Route ${routeNumber}`, doc.internal.pageSize.width / 2, yPosition, { align: 'center' });
-    yPosition += lineHeight * 2;
+    // Bus icon as base64 PNG data URL
+    const busIconBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAATlJREFUOI2tlD9KA1EQxn9fSKOgiKbRKlgJYpcuEgMGPICdloJ/TmFyAk+QE+wJ7CSguUQawUJBQeysxsJ5y0uy2azufjAMb/ab780s80ZmRpWozwYkrQCHwMaS3E9gZGbfU1EzSw1oAS+AFbRnoDWlEYltAq9/EAv2BmxlCV464SK+Mc+inKsQq0Xd77h/WvLvYjy63w6B2gLiv1EDkLQHtEvotF0jrfAA6JUQ7LlG9S3XAcwskTQAboF9SasF83fdD8wsSQVnkJSpMKvlCXAHfOTkvTtnMvclGtI+v0Pa8fMNi1/HtXM6fu5nDXbAsaQ14Cinwq5z5icjqvAsp6Jldh50FPahJAEP3sYXcJ9TIcAJsA6MgK4FoZnHPvQbxwUWw9i5w8z15aQGcAo0Cwg2nduI42nLVeEHcL4f5RmENyEAAAAASUVORK5CYII='
+    // Add the base64 image to PDF
+    doc.addImage(busIconBase64, 'PNG', 2, 3, 2.5, 2.5); // x, y, width, height in mm
 
-    // Add stops
-    doc.setFontSize(12);
+    // Title (moved slightly to the right to accommodate icon)
+    doc.setFontSize(6);
+    doc.text(routeNumber, 6, 5, { align: 'left' });
+
+    // Stops list
+    doc.setFontSize(4);
+    let yPosition = 10;
+    const lineHeight = 3;
+    const maxWidth = 25; // Maximum width for text in mm
+
     stops.forEach((stop) => {
       if (stop) {
-        // Check if we need a new page
-        if (yPosition > 270) {
-          doc.addPage();
-          yPosition = 20;
+        if (yPosition > 58) {
+          doc.addPage([29, 62]);
+          yPosition = 10;
         }
-        doc.text(`• ${stop.stop_name}`, 20, yPosition);
-        yPosition += lineHeight;
+
+        // Split long stop names into multiple lines
+        const stopText = `• ${stop.stop_name}`;
+        const lines = doc.splitTextToSize(stopText, maxWidth);
+        
+        doc.text(lines, 2, yPosition);
+        yPosition += lineHeight * lines.length;
       }
     });
 
@@ -129,7 +144,6 @@ export async function POST(req: NextRequest) {
     return new NextResponse(pdfOutput, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename=route_${routeNumber}.pdf`,
       },
     });
   } catch (error: any) {
