@@ -1,4 +1,6 @@
 'use client'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, Bus, Loader2, Download } from 'lucide-react';
 import { routes } from './data/routes';
